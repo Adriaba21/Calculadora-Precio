@@ -1,0 +1,68 @@
+from pathlib import Path
+
+html = """<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de precios</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:20px;background:#f4f4f4}
+.card{background:white;padding:22px;border-radius:16px;box-shadow:0 3px 12px #0002}
+h1{text-align:center}
+label{display:block;margin-top:14px;font-weight:bold}
+input{width:100%;box-sizing:border-box;padding:12px;margin-top:6px;border:1px solid #bbb;border-radius:9px;font-size:16px}
+button{width:100%;padding:13px;margin-top:18px;border:0;border-radius:9px;font-size:17px;cursor:pointer}
+#resultado{margin-top:20px;padding:15px;background:#eee;border-radius:10px}
+.big{font-size:26px;font-weight:bold}
+small{display:block;margin-top:10px;color:#666}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>Calculadora de precios</h1>
+
+<label>Precio del producto (USD)</label>
+<input id="producto" type="number" step="0.01" placeholder="Ej. 50">
+
+<label>Peso (kg)</label>
+<input id="peso" type="number" step="0.01" placeholder="Ej. 2">
+
+<label>Tipo de cambio (S/ por USD)</label>
+<input id="tc" type="number" step="0.001" placeholder="Ej. 3.50">
+
+<button onclick="calcular()">Calcular precio</button>
+
+<div id="resultado">Ingresa los datos para calcular.</div>
+<small>Envío: US$ 9.50 por kg · Ganancia: 20%</small>
+</div>
+
+<script>
+function calcular(){
+  const producto = Number(document.getElementById('producto').value);
+  const peso = Number(document.getElementById('peso').value);
+  const tc = Number(document.getElementById('tc').value);
+
+  if(!producto || !peso || !tc){
+    document.getElementById('resultado').innerHTML = "Completa todos los campos.";
+    return;
+  }
+
+  const envio = peso * 9.50;
+  const costoUSD = producto + envio;
+  const ventaUSD = costoUSD * 1.20;
+  const ventaSoles = ventaUSD * tc;
+
+  document.getElementById('resultado').innerHTML =
+    "Envío: US$ " + envio.toFixed(2) +
+    "<br>Costo total: US$ " + costoUSD.toFixed(2) +
+    "<br>Precio con 20% de ganancia: US$ " + ventaUSD.toFixed(2) +
+    '<br><br><span class="big">Precio final: S/ ' + ventaSoles.toFixed(2) + "</span>";
+}
+</script>
+</body>
+</html>"""
+
+path = Path("/mnt/data/index.html")
+path.write_text(html, encoding="utf-8")
+print(f"[Descargar la calculadora index.html](sandbox:{path})")
